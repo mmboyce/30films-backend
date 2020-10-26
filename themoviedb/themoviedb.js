@@ -6,8 +6,9 @@
  * https://github.com/cavestri/themoviedb-javascript-library
  *
  */
-
+var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 var theMovieDb = {};
+require('dotenv').config();
 var V3_API_KEY = process.env.V3_API_KEY;
 
 theMovieDb.common = {
