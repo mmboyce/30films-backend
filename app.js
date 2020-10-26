@@ -31,12 +31,14 @@ var allowedOrigins = (function createAllowedOriginsArray () {
 })();
 console.log('Allowed origin = ' + (isDevelopment ? '*' : 'https://mmboyce.github.io'));
 
+// DATABASE SETUP
 mongoose.connect(DB_CONN, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => console.log('Connected to Database.'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -63,7 +65,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function redirectRequests(req, res, next) {
+app.use(function prohibitAccess(req, res, next) {
     if (!isDevelopment) {
         var callOrigin = req.headers['origin'];
         if (!allowedOrigins.includes(callOrigin)) {
@@ -78,6 +80,7 @@ app.use(function redirectRequests(req, res, next) {
     next();
 });
 
+app.use(express.json());
 app.use('/', indexRouter);
 app.use('/results', resultsRouter);
 app.use('/search', searchRouter);
