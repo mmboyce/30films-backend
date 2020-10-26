@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 var httpErrors = require('http-errors-express').default;
+var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var resultsRouter = require('./routes/results');
@@ -14,6 +15,7 @@ var searchRouter = require('./routes/search');
 require('dotenv').config();
 var app = express();
 
+var DB_CONN = process.env.DB_CONN;
 var environment = process.env.NODE_ENV;
 var isDevelopment = environment === 'development';
 
@@ -29,7 +31,12 @@ var allowedOrigins = (function createAllowedOriginsArray () {
 })();
 console.log('Allowed origin = ' + (isDevelopment ? '*' : 'https://mmboyce.github.io'));
 
-
+mongoose.connect(DB_CONN, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
