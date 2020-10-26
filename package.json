@@ -2,6 +2,9 @@
   "name": "backend",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "15.x"
+  },
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
     "testprod": "NODE_ENV=production nodemon ./bin/www",
