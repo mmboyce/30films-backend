@@ -7,6 +7,7 @@ var createError = require('http-errors');
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.json({
+      
     });        
 });
 
@@ -21,8 +22,8 @@ async function searchForFilm(req, res, next) {
             include_adult: false,
         },
         function successCallBack(results) {
+            console.log('Successful query.');
             res.queryResults = JSON.parse(results);
-            console.log('Success\n' + results);
             next();
         },
         function failureCallback(err) {
