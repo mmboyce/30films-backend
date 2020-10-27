@@ -69,7 +69,7 @@ app.use(function prohibitAccess(req, res, next) {
     if (!isDevelopment) {
         var callOrigin = req.headers['origin'];
         if (!allowedOrigins.includes(callOrigin)) {
-            console.log('UNAUTHORIZED ACCESS FROM ORIGIN: ' + ip + ' - ' + callOrigin + ' as origin');
+            console.log('UNAUTHORIZED ACCESS FROM ORIGIN: ' + req.ip + ' - ' + callOrigin + ' as origin');
             next(createError(403, 'Access not authorized.', {
                 detail: {
                     'If you would like to see the backend source': 'Contact me.',
