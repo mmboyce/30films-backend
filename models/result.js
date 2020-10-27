@@ -8,6 +8,7 @@ var ResultSchema = new mongoose.Schema({
     films: [{
         title: String,
         tmdbId: String,
+        poster_path: String,
     }]
 },
 {
