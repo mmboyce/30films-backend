@@ -21,10 +21,10 @@ var isDevelopment = environment === 'development';
 
 // the origins that are allowed to make requests to the backend
 var allowedOrigins = (function createAllowedOriginsArray () {
-    var arr = ['https://mmboyce.github.io'];
+    var arr = ['https://30films.netlify.app'];
 
     if (isDevelopment) {
-        arr.push('http://192.168.1.226:3001');
+        arr.push('http://192.168.1.221:3001');
     }
 
     return arr;
