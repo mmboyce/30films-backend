@@ -36,6 +36,25 @@ router.post('/', async function (req, res, next) {
     }
 });
 
+router.patch('/:id', getResult, restrictToDevelopment, async function (req, res, next) {  
+    try {
+        // A patch request may upadte the name or film list.
+        if (req.body.name) {
+            res.result.name = req.body.name;
+        }
+
+        if (req.body.films) {
+            res.result.films = req.body.films;
+        }
+
+        var newResult = await res.result.save();
+
+        res.status(200).json(newResult);
+    } catch (err) {
+        next(createError(400, err.message));
+    }
+});
+
 router.delete('/:id', getResult, restrictToDevelopment, async function (req, res, next) {
     try {
         await res.result.remove();
@@ -82,6 +101,7 @@ function restrictToDevelopment(req, res, next) {
 
 async function getResult(req, res, next) {
     var result;
+
     try {
         result = await Result.findById(req.params.id);
         if (result === null) {
