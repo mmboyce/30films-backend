@@ -9,7 +9,6 @@ router.get('/', async function (req, res, next) {
         var results = await Result.find({}, {films: 0 });
         var count = results.length;
         
-        
         res.json({
             count,
             results
@@ -37,19 +36,49 @@ router.post('/', async function (req, res, next) {
     }
 });
 
-router.delete('/:id', getResult, async function (req, res, next) {
-    var isDevelopment = process.env.NODE_ENV === 'development';
-    if(isDevelopment){
-        try {
-            await res.result.remove();
-            res.json({ message: 'Deleted Result' });
-        } catch (err) {
-            next(createError(500, err.message));
-        }
-    } else {
-        next(createError(403, 'Contact me if you would like your submission removed.'));
+router.delete('/:id', getResult, restrictToDevelopment, async function (req, res, next) {
+    try {
+        await res.result.remove();
+        res.json({ message: 'Deleted Result' });
+    } catch (err) {
+        req.method;
+        next(createError(500, err.message));
     }
 });
+
+function restrictToDevelopment(req, res, next) {
+    var isDevelopment = process.env.NODE_ENV === 'development';
+
+    const errMsg = (function createErrorMessageFromRequestMethod() {
+        let output;
+        
+        switch (req.method) {
+            case 'GET':
+                output = 'Contact me if you would like to access this submission.';
+                break;
+            case 'POST':
+                output = 'Contact me if you would like to submit this.';
+                break;
+            case 'PUT':
+            case 'PATCH':
+                output = 'Contact me if you would like to update your submission.';
+                break;
+            case 'DELETE':
+                output = 'Contact me if you would like your submission removed.';
+                break;
+            default:
+                output = 'Contact me if you would like this request to be made.';
+        }
+    
+        return output;
+    }());
+    
+    if (isDevelopment) {
+        next();       
+    } else {
+        next(createError(403, errMsg));
+    }
+}
 
 async function getResult(req, res, next) {
     var result;
