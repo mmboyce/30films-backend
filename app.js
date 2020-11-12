@@ -19,9 +19,11 @@ var DB_CONN = process.env.DB_CONN;
 var environment = process.env.NODE_ENV;
 var isDevelopment = environment === 'development';
 
+var productionOrigin = 'https://30films.netlify.app';
+
 // the origins that are allowed to make requests to the backend
 var allowedOrigins = (function createAllowedOriginsArray () {
-    var arr = ['https://30films.netlify.app'];
+    var arr = [productionOrigin];
 
     if (isDevelopment) {
         arr.push('http://192.168.1.221:3001');
@@ -29,7 +31,7 @@ var allowedOrigins = (function createAllowedOriginsArray () {
 
     return arr;
 })();
-console.log('Allowed origin = ' + (isDevelopment ? '*' : 'https://mmboyce.github.io'));
+console.log('Allowed origin = ' + (isDevelopment ? '*' : productionOrigin));
 
 // DATABASE SETUP
 mongoose.connect(DB_CONN, {
